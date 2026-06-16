@@ -359,7 +359,7 @@ export default function Home() {
 
   const guideContent = [
     {
-      title: "The Core Concept",
+      title: "The GuitarLlama Method",
       content: "Most players try to learn the neck by counting up the frets (A... A#... B... C). This is too slow for real playing.\n\nThis trainer jumps you around the neck unpredictably. By forcing you to find notes out of order, you stop counting and start building instant muscle memory."
     },
     {
