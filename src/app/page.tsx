@@ -384,39 +384,41 @@ export default function Home() {
     <div className="min-h-[100dvh] lg:h-screen bg-pro-bg text-pro-text flex flex-col p-2 md:p-4 overflow-x-hidden font-sans">
       <header className="flex flex-col md:flex-row justify-between items-center mb-6 px-2 gap-4 md:gap-0">
         <div className="flex items-center justify-between w-full md:w-auto gap-3 select-none pointer-events-none">
-          <Image src="/logo.png" alt="Guitar Llama Logo" width={180} height={40} className="object-contain" />
-          <h1 className="text-lg sm:text-xl md:text-2xl font-black tracking-tighter uppercase cursor-default"><span className="text-gradient font-black">FRETBOARD MEMORIZER</span></h1>
+          <Image src="/logo.png" alt="Guitar Llama Logo" width={180} height={40} className="object-contain flex-shrink-0" />
+          <h1 className="text-lg sm:text-xl md:text-2xl font-black tracking-tighter uppercase cursor-default text-right leading-tight"><span className="text-gradient font-black">FRETBOARD MEMORIZER</span></h1>
         </div>
-        <div className="flex flex-wrap justify-center items-center gap-2 md:gap-4 relative z-50">
-          <button 
-            onClick={() => { setGuideSlide(0); setShowGuide(true); }}
-            className="px-4 py-1.5 rounded-full text-sm font-black tracking-widest border transition-all cursor-pointer bg-pro-card border-pro-border text-pro-muted hover:border-pro-text hover:text-pro-text"
-          >
-            HOW TO USE
-          </button>
-          
-          <button 
-            onClick={resetProgress} 
-            className="px-3 py-1.5 rounded-full text-xs font-black tracking-widest border transition-all cursor-pointer bg-pro-card border-pro-border text-pro-muted hover:border-danger hover:text-danger"
-            title="Reset Neural Engine memory without losing calibration"
-          >
-            RESET CACHE
-          </button>
-          <div className="relative group flex items-center h-full">
+        <div className="flex flex-wrap justify-center md:justify-end items-center gap-2 md:gap-4 relative z-50 w-full md:w-auto">
+          <div className="flex items-center justify-center gap-2 w-full md:w-auto">
             <button 
-              onClick={() => updateSetting('showHeatmap', !settings.showHeatmap)} 
-              className={`px-4 py-1.5 rounded-full text-sm font-black tracking-widest border transition-all cursor-pointer ${settings.showHeatmap ? 'bg-success/10 border-success text-success shadow-[0_0_15px_rgba(16,185,129,0.2)]' : 'bg-pro-card border-pro-border text-pro-muted hover:border-pro-accent hover:text-pro-accent'}`}
+              onClick={() => { setGuideSlide(0); setShowGuide(true); }}
+              className="px-3 md:px-4 py-1.5 rounded-full text-[10px] md:text-sm font-black tracking-widest border transition-all cursor-pointer bg-pro-card border-pro-border text-pro-muted hover:border-pro-text hover:text-pro-text"
             >
-              HEATMAP
+              HOW TO USE
             </button>
-            <div className="absolute top-full right-0 mt-3 w-56 p-3 bg-pro-text text-pro-bg text-xs font-bold rounded-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50 pointer-events-none shadow-2xl leading-relaxed">
-               <div className="mb-1 text-pro-accent uppercase tracking-tighter">Mastery Heatmap</div>
-               Visualizes your neural stability across the fretboard. <span className="text-success">Green</span> = Mastered, <span className="text-danger">Red</span> = Needs practice.
-               <div className="absolute bottom-full right-8 border-4 border-transparent border-b-pro-text"></div>
+            
+            <button 
+              onClick={resetProgress} 
+              className="px-3 py-1.5 rounded-full text-[10px] md:text-xs font-black tracking-widest border transition-all cursor-pointer bg-pro-card border-pro-border text-pro-muted hover:border-danger hover:text-danger"
+              title="Reset Neural Engine memory without losing calibration"
+            >
+              RESET CACHE
+            </button>
+            <div className="relative group flex items-center h-full">
+              <button 
+                onClick={() => updateSetting('showHeatmap', !settings.showHeatmap)} 
+                className={`px-3 md:px-4 py-1.5 rounded-full text-[10px] md:text-sm font-black tracking-widest border transition-all cursor-pointer ${settings.showHeatmap ? 'bg-success/10 border-success text-success shadow-[0_0_15px_rgba(16,185,129,0.2)]' : 'bg-pro-card border-pro-border text-pro-muted hover:border-pro-accent hover:text-pro-accent'}`}
+              >
+                HEATMAP
+              </button>
+              <div className="absolute top-full right-0 mt-3 w-56 p-3 bg-pro-text text-pro-bg text-xs font-bold rounded-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50 pointer-events-none shadow-2xl leading-relaxed">
+                 <div className="mb-1 text-pro-accent uppercase tracking-tighter">Mastery Heatmap</div>
+                 Visualizes your neural stability across the fretboard. <span className="text-success">Green</span> = Mastered, <span className="text-danger">Red</span> = Needs practice.
+                 <div className="absolute bottom-full right-8 border-4 border-transparent border-b-pro-text"></div>
+              </div>
             </div>
           </div>
           
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-pro-card border border-pro-border text-xs font-bold uppercase tracking-wider cursor-default select-none shadow-sm">
+          <div className="flex items-center justify-center gap-2 px-3 py-1.5 rounded-full bg-pro-card border border-pro-border text-xs font-bold uppercase tracking-wider cursor-default select-none shadow-sm w-full md:w-auto mt-2 md:mt-0">
             <div className={`w-1.5 h-1.5 rounded-full ${tuner.isRunning ? 'bg-success animate-pulse' : tuner.isInitializing ? 'bg-warning animate-bounce' : 'bg-danger'}`}></div>
             {tuner.isRunning ? 'Live Engine' : tuner.isInitializing ? 'Connecting...' : 'Engine Idle'}
           </div>
