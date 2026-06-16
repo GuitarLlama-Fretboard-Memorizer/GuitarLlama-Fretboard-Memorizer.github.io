@@ -70,12 +70,13 @@ export function updateMasteryEntry(entry: any, success: boolean, timeSeconds: nu
     
     if (success) {
         // Mastery is speed + accuracy
-        if (timeSeconds < 2.0) {
+        // Relaxed thresholds to account for physical guitar travel time
+        if (timeSeconds < 3.0) {
             newStability = Math.min(1.0, current.stability + 0.3); // "Instant Recall"
-        } else if (timeSeconds < 4.5) {
-            newStability = Math.min(1.0, current.stability + 0.1); // "Correct but Slow"
+        } else if (timeSeconds < 6.0) {
+            newStability = Math.min(1.0, current.stability + 0.1); // "Confident but Paced"
         } else {
-            newStability = Math.min(1.0, current.stability + 0.05); // "Struggled"
+            newStability = Math.min(1.0, current.stability + 0.05); // "Learning/Struggled"
         }
     } else {
         // Mistake: Heavy penalty. Note enters "Re-learning" phase.

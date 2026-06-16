@@ -14,19 +14,29 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://guitarllama-fretboard-memorizer.github.io'),
-  title: "GuitarLlama | Fretboard Memorizer",
+  title: {
+    template: 'GuitarLlama | %s',
+    default: 'GuitarLlama | Fretboard Memorizer',
+  },
   description: "The ultimate guitar fretboard memorization app. Master the guitar neck, learn fret notes instantly, and improve your neural stability with our interactive fret note memorizer.",
   keywords: "guitar fretboard memorization app, guitar fret note memorizer app, learn guitar notes, fretboard trainer, guitar neck master, interactive guitar fretboard, spaced repetition guitar",
+  authors: [{ name: "GuitarLlama" }],
+  icons: {
+    icon: '/favicon.ico',
+    apple: '/favicon.ico',
+  },
   openGraph: {
     title: "GuitarLlama | Fretboard Memorizer",
     description: "The ultimate guitar fretboard memorization app. Master the guitar neck and learn fret notes instantly.",
+    siteName: "GuitarLlama",
+    locale: "en_US",
     type: "website",
     url: "https://guitarllama-fretboard-memorizer.github.io",
     images: [
       {
-        url: "/logo.png",
-        width: 800,
-        height: 800,
+        url: "https://s3.us-east-2.amazonaws.com/guitarllama-prod/meta_tag_og_icon@2x.png",
+        width: 1200,
+        height: 630,
         alt: "GuitarLlama Logo",
       },
     ],
@@ -35,7 +45,10 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "GuitarLlama | Fretboard Memorizer",
     description: "The ultimate guitar fretboard memorization app. Master the guitar neck and learn fret notes instantly.",
-    images: ["/logo.png"],
+    images: ["https://s3.us-east-2.amazonaws.com/guitarllama-prod/meta_tag_twitter_icon@2x.png"],
+  },
+  other: {
+    'fb:app_id': '163545024267987',
   },
 };
 
