@@ -70,10 +70,10 @@ export function updateMasteryEntry(entry: any, success: boolean, timeSeconds: nu
     
     if (success) {
         // Mastery is speed + accuracy
-        // Relaxed thresholds to account for physical guitar travel time
-        if (timeSeconds < 3.0) {
+        // Relaxed thresholds to account for physical guitar travel time (v2: 4s/8s)
+        if (timeSeconds < 4.0) {
             newStability = Math.min(1.0, current.stability + 0.3); // "Instant Recall"
-        } else if (timeSeconds < 6.0) {
+        } else if (timeSeconds < 8.0) {
             newStability = Math.min(1.0, current.stability + 0.1); // "Confident but Paced"
         } else {
             newStability = Math.min(1.0, current.stability + 0.05); // "Learning/Struggled"
