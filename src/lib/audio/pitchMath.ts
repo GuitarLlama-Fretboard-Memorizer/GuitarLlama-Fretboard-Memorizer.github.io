@@ -70,13 +70,13 @@ export function updateMasteryEntry(entry: any, success: boolean, timeSeconds: nu
     
     if (success) {
         // Mastery is speed + accuracy
-        // v3: Generous thresholds to reward learning and reduce the "grind"
-        if (timeSeconds < 5.0) {
-            newStability = Math.min(1.0, current.stability + 0.4); // Mastered in ~3 hits
-        } else if (timeSeconds < 10.0) {
-            newStability = Math.min(1.0, current.stability + 0.2); // Mastered in ~5 hits
+        // v4: Balanced Pro - Rewarding accuracy but requiring multiple hits for mastery
+        if (timeSeconds < 4.0) {
+            newStability = Math.min(1.0, current.stability + 0.25); // Mastered in ~4 hits
+        } else if (timeSeconds < 8.0) {
+            newStability = Math.min(1.0, current.stability + 0.10); // Mastered in ~10 hits
         } else {
-            newStability = Math.min(1.0, current.stability + 0.1); // Mastered in ~10 hits
+            newStability = Math.min(1.0, current.stability + 0.05); // Mastered in ~20 hits
         }
     } else {
         // Mistake: Heavy penalty. Note enters "Re-learning" phase.

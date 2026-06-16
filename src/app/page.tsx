@@ -115,6 +115,7 @@ export default function Home() {
   const [questionStartTime, setQuestionStartTime] = useState(0);
   const questionStartTimeRef = useRef(0);
   const lastPromptRef = useRef<NoteInfo | null>(null);
+  const previousPromptRef = useRef<NoteInfo | null>(null);
   const [feedback, setFeedback] = useState<{message: string, type: 'success'|'error'|'warning'|null}>({message: '', type: null});
 
   // --- AUTO-CALIBRATION ---
@@ -225,9 +226,10 @@ export default function Home() {
         randomNum -= item.weight;
     }
 
+    previousPromptRef.current = currentPrompt;
     lastPromptRef.current = selected;
     setCurrentPrompt(selected);
-    setCurrentQuestionIndex(nextIndex);
+    setQuestionStartTime(Date.now());
     currentQuestionIndexRef.current = nextIndex;
     setQuestionStartTime(Date.now());
     questionStartTimeRef.current = Date.now();
@@ -292,7 +294,7 @@ export default function Home() {
     micGain: settings.micGain, 
     noiseGateThreshold: settings.noiseGateThreshold,
     targetMidi: targetMidiForTuner,
-    previousMidi: isTransitioning ? null : (lastPromptRef.current?.midi || null),
+    previousMidi: isTransitioning ? null : (previousPromptRef.current?.midi || null),
     deviceId: settings.deviceId,
     onSuccess: triggerSuccessState,
     onMistake: triggerWrongState
@@ -580,19 +582,19 @@ export default function Home() {
                   )}
                   <span>{feedback.message || (tuner.isRunning ? 'Scanning Frequency' : tuner.isInitializing ? 'Waking Neural Core' : 'Standby')}</span>
                 </div>
-                <div className="text-pro-muted text-sm font-black uppercase tracking-[0.3em] mb-2 opacity-50">{isRoundComplete ? "Round Complete" : currentPrompt ? `Location: String ${currentPrompt.string} — Fret ${currentPrompt.fret}` : "Ready to Begin"}</div>
+                <div className={`text-pro-muted text-sm font-black uppercase tracking-[0.3em] ${isRoundComplete ? 'mb-6' : 'mb-2'} opacity-50`}>{isRoundComplete ? "Round Complete" : currentPrompt ? `Location: String ${currentPrompt.string} — Fret ${currentPrompt.fret}` : "Ready to Begin"}</div>
                 <div className={`text-[clamp(6rem,15vw,12rem)] font-black tracking-tighter leading-none transform drop-shadow-sm ${feedback.type === 'success' ? 'scale-105 text-success transition-transform duration-150' : feedback.type === 'error' ? 'shake text-danger' : 'text-pro-text'}`}>{isRoundComplete ? "🏆" : currentPrompt ? currentPrompt.noteName : "--"}</div>
-                <div className="mt-8 w-full max-w-[240px]">
+                <div className="mt-8 w-full max-w-[280px]">
                   {tuner.isRunning && currentPrompt && !isRoundComplete ? (
                     <button onClick={() => { if (!isTransitioning) { recordResult(false, currentPrompt); selectNextNote(); }}} className="w-full py-3.5 rounded-xl bg-pro-bg border border-pro-border text-pro-muted font-black uppercase text-xs tracking-widest transition-all cursor-pointer hover:border-pro-muted hover:bg-pro-card active:scale-95 shadow-sm">Skip Iteration</button>
                   ) : !tuner.isRunning ? (
-                    <button onClick={tuner.start} disabled={tuner.isInitializing} className={`w-full py-5 rounded-3xl font-black uppercase text-base tracking-[0.3em] shadow-2xl transition-all active:scale-95 flex items-center justify-center gap-3 ${tuner.isInitializing ? 'bg-pro-border text-pro-muted cursor-wait' : 'bg-pro-text text-pro-card cursor-pointer hover:scale-[1.02] shadow-pro-accent/10'}`}>
+                    <button onClick={tuner.start} disabled={tuner.isInitializing} className={`w-full py-4 rounded-3xl font-black uppercase text-base tracking-[0.2em] shadow-2xl transition-all active:scale-95 flex items-center justify-center gap-3 ${tuner.isInitializing ? 'bg-pro-border text-pro-muted cursor-wait' : 'bg-pro-text text-pro-card cursor-pointer hover:scale-[1.02] shadow-pro-accent/10'}`}>
                       {tuner.isInitializing && <div className="w-3 h-3 border-2 border-pro-muted border-t-pro-accent rounded-full animate-spin"></div>}
                       {tuner.isInitializing ? 'Connecting...' : 'Start Microphone'}
                     </button>
                   ) : (
                     <div className="flex flex-col gap-3 w-full">
-                      <button onClick={startNewRound} className="w-full py-5 rounded-3xl bg-pro-accent text-white font-black uppercase text-base tracking-[0.3em] shadow-xl shadow-pro-accent/20 cursor-pointer hover:scale-[1.02] active:scale-95 transition-all">
+                      <button onClick={startNewRound} className="w-full py-4 rounded-3xl bg-pro-accent text-white font-black uppercase text-sm tracking-widest shadow-xl shadow-pro-accent/20 cursor-pointer hover:scale-[1.02] active:scale-95 transition-all px-2">
                         {countdown !== null ? `Auto-Starting in ${countdown}...` : 'Launch Round'}
                       </button>
                       {isRoundComplete && (
