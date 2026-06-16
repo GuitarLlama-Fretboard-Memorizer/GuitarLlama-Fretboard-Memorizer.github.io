@@ -28,6 +28,7 @@ interface TrainerSettings {
   noiseGateThreshold: number;
   deviceId: string;
   autoNextRound: boolean;
+  hasSeenGuide: boolean;
 }
 
 const DEFAULT_SETTINGS: TrainerSettings = {
@@ -40,6 +41,7 @@ const DEFAULT_SETTINGS: TrainerSettings = {
   noiseGateThreshold: 8,
   deviceId: 'default',
   autoNextRound: false,
+  hasSeenGuide: false,
 };
 
 export default function Home() {
@@ -48,13 +50,29 @@ export default function Home() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [audioDevices, setAudioDevices] = useState<MediaDeviceInfo[]>([]);
   const [countdown, setCountdown] = useState<number | null>(null);
+  
+  // --- GUIDE STATE ---
+  const [showGuide, setShowGuide] = useState(false);
+  const [guideSlide, setGuideSlide] = useState(0);
 
   // --- PERSISTENCE & INIT ---
   useEffect(() => {
     const savedMastery = localStorage.getItem('guitar-trainer-mastery');
     const savedSettings = localStorage.getItem('guitar-trainer-settings');
     if (savedMastery) { try { setMastery(JSON.parse(savedMastery)); } catch (e) { console.error(e); } }
-    if (savedSettings) { try { setSettings({ ...DEFAULT_SETTINGS, ...JSON.parse(savedSettings) }); } catch (e) { console.error(e); } }
+    
+    let loadedSettings = { ...DEFAULT_SETTINGS };
+    if (savedSettings) { 
+      try { 
+        const parsed = JSON.parse(savedSettings);
+        loadedSettings = { ...DEFAULT_SETTINGS, ...parsed };
+        setSettings(loadedSettings); 
+      } catch (e) { console.error(e); } 
+    }
+    
+    if (!loadedSettings.hasSeenGuide) {
+      setShowGuide(true);
+    }
     
     // Fetch input devices
     navigator.mediaDevices.enumerateDevices().then(devices => {
@@ -70,6 +88,11 @@ export default function Home() {
       localStorage.setItem('guitar-trainer-settings', JSON.stringify(newSettings));
       return newSettings;
     });
+  };
+
+  const closeGuide = () => {
+    setShowGuide(false);
+    updateSetting('hasSeenGuide', true);
   };
 
   const resetProgress = useCallback(() => {
@@ -334,6 +357,25 @@ export default function Home() {
      return Math.floor((sum / count) * 100);
   }, [masteryScores, settings]);
 
+  const guideContent = [
+    {
+      title: "Step 0: Calibrate",
+      content: "Before you start, click the CALIBRATE button in the bottom left.\n\nThe neural engine needs to learn your room's noise floor and your guitar's peak output volume to accurately track your fretboard."
+    },
+    {
+      title: "The Strategy",
+      content: "Stop counting frets. Linear thinking is a crutch that prevents true fluency. This tool uses random repetition to map note locations directly into your muscle memory. Bridge the gap between knowing the notes and instantly playing them."
+    },
+    {
+      title: "Step 1: Isolate Strings",
+      content: "Focus on one string at a time to build your foundational map.\n\n• Toggle Natural Only ON.\n• Set Fret Span to 0 — 11.\n• Start with String 6 (Low E) and reach 100% Mastery before moving to String 5 (A)."
+    },
+    {
+      title: "Step 2: Connect the Map",
+      content: "Once individual strings are clear, start connecting them vertically.\n\n• Select 3 adjacent strings at a time.\n• Keep Fret Span at 0 — 11 (the neck repeats at fret 12).\n• Toggle Natural Only OFF to find and fix your blind spots."
+    }
+  ];
+
   if (!isLoaded) return <div className="h-screen bg-pro-bg flex items-center justify-center font-sans"><div className="text-pro-muted font-black animate-pulse uppercase tracking-[0.3em]">Neural Engine Loading...</div></div>;
 
   return (
@@ -344,6 +386,13 @@ export default function Home() {
           <h1 className="text-xl md:text-2xl font-black tracking-tighter uppercase cursor-default"><span className="text-gradient font-black">FRETBOARD MEMORIZER</span></h1>
         </div>
         <div className="flex items-center gap-4">
+          <button 
+            onClick={() => { setGuideSlide(0); setShowGuide(true); }}
+            className="px-4 py-1.5 rounded-full text-xs font-black tracking-widest border transition-all cursor-pointer bg-pro-card border-pro-border text-pro-muted hover:border-pro-text hover:text-pro-text"
+          >
+            GUIDE
+          </button>
+          
           <button 
             onClick={resetProgress} 
             className="px-3 py-1.5 rounded-full text-xs font-black tracking-widest border transition-all cursor-pointer bg-pro-card border-pro-border text-pro-muted hover:border-danger hover:text-danger"
@@ -443,7 +492,35 @@ export default function Home() {
         <div className="col-span-9 flex flex-col gap-4 min-h-0">
           <div className={`flex-1 relative flex flex-col items-center justify-center p-6 rounded-[2.5rem] border border-pro-border shadow-pro transition-colors duration-75 overflow-hidden ${calibrationState !== 'idle' ? 'bg-primary/5 border-primary' : feedback.type === 'success' ? 'bg-success/[0.04]' : feedback.type === 'error' ? 'bg-danger/[0.04]' : 'bg-pro-card'}`}>
             
-            {calibrationState !== 'idle' ? (
+            {showGuide ? (
+              <div className="flex flex-col items-center justify-center h-full w-full animate-in fade-in zoom-in duration-300 max-w-2xl mx-auto z-10">
+                <div className="flex justify-between w-full mb-6">
+                  <div className="text-pro-accent font-black uppercase tracking-widest text-xs">Recommended Workflow</div>
+                  <div className="text-pro-muted font-bold text-xs">{guideSlide + 1} / {guideContent.length}</div>
+                </div>
+                
+                <h2 className="text-3xl md:text-4xl font-black text-center mb-6 text-pro-text">{guideContent[guideSlide].title}</h2>
+                
+                <div className="text-base md:text-lg text-pro-muted leading-relaxed whitespace-pre-wrap flex-1 flex items-center mb-8">
+                  {guideContent[guideSlide].content}
+                </div>
+
+                <div className="flex justify-between items-center w-full mt-4 gap-4">
+                  <button 
+                    onClick={() => guideSlide > 0 ? setGuideSlide(s => s - 1) : closeGuide()} 
+                    className="flex-1 py-4 rounded-2xl bg-pro-bg border border-pro-border text-pro-muted font-black uppercase text-xs tracking-widest transition-all hover:border-pro-muted"
+                  >
+                    {guideSlide > 0 ? 'Previous' : 'Skip Guide'}
+                  </button>
+                  <button 
+                    onClick={() => guideSlide < guideContent.length - 1 ? setGuideSlide(s => s + 1) : closeGuide()} 
+                    className="flex-1 py-4 rounded-2xl bg-pro-accent text-white font-black uppercase text-xs tracking-widest shadow-xl shadow-pro-accent/20 transition-all hover:scale-[1.02]"
+                  >
+                    {guideSlide < guideContent.length - 1 ? 'Next' : 'Start Training'}
+                  </button>
+                </div>
+              </div>
+            ) : calibrationState !== 'idle' ? (
               <div className="flex flex-col items-center justify-center h-full w-full animate-in fade-in zoom-in duration-300">
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[15rem] font-black opacity-[0.02] select-none pointer-events-none text-primary">MIC</div>
                 
@@ -551,8 +628,8 @@ export default function Home() {
                        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 w-64 p-3 bg-pro-text text-pro-bg text-xs font-bold rounded-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50 pointer-events-none shadow-2xl leading-relaxed">
                          <div className="mb-1 text-pro-accent uppercase tracking-tighter">Memorization Mastery</div>
                          <ul className="space-y-1 opacity-90">
-                           <li><span className="text-success">85-100%</span>: Proficient (Recall under 5s)</li>
-                           <li><span className="text-warning">60-84%</span>: Improving (Recall under 10s)</li>
+                           <li><span className="text-success">85-100%</span>: Proficient (Recall under 4s)</li>
+                           <li><span className="text-warning">60-84%</span>: Improving (Recall under 8s)</li>
                            <li><span className="text-danger">0-59%</span>: Learning (Looking down or guessing)</li>                         </ul>
                          <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-pro-text"></div>
                        </div>
