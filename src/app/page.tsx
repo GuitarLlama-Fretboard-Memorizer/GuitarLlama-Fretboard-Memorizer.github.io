@@ -32,10 +32,10 @@ interface TrainerSettings {
 }
 
 const DEFAULT_SETTINGS: TrainerSettings = {
-  activeStrings: [1, 2, 3, 4, 5, 6],
-  fretRange: [0, 12],
+  activeStrings: [6], // Start with Low E only
+  fretRange: [0, 11], // Start with 0-11
   questionsPerRound: 20,
-  naturalsOnly: false,
+  naturalsOnly: true, // Start with naturals only
   showHeatmap: false,
   micGain: 8,
   noiseGateThreshold: 8,
@@ -359,12 +359,8 @@ export default function Home() {
 
   const guideContent = [
     {
-      title: "Step 0: Calibrate",
-      content: "Before you start, click the CALIBRATE button in the bottom left.\n\nThe neural engine needs to learn your room's noise floor and your guitar's peak output volume to accurately track your fretboard."
-    },
-    {
-      title: "The Strategy",
-      content: "Stop counting frets. Linear thinking is a crutch that prevents true fluency. This tool uses random repetition to map note locations directly into your muscle memory. Bridge the gap between knowing the notes and instantly playing them."
+      title: "The Core Concept",
+      content: "Most players try to learn the neck by counting up the frets (A... A#... B... C). This is too slow for real playing.\n\nThis trainer jumps you around the neck unpredictably. By forcing you to find notes out of order, you stop counting and start building instant muscle memory."
     },
     {
       title: "Step 1: Isolate Strings",
@@ -373,6 +369,10 @@ export default function Home() {
     {
       title: "Step 2: Connect the Map",
       content: "Once individual strings are clear, start connecting them vertically.\n\n• Select 3 adjacent strings at a time.\n• Keep Fret Span at 0 — 11 (the neck repeats at fret 12).\n• Toggle Natural Only OFF to find and fix your blind spots."
+    },
+    {
+      title: "Step 3: Calibrate",
+      content: "Before you start, click the CALIBRATE button in the bottom left.\n\nThe neural engine needs to learn your room's noise floor and your guitar's peak output volume to accurately track your fretboard."
     }
   ];
 
@@ -493,28 +493,29 @@ export default function Home() {
           <div className={`flex-1 relative flex flex-col items-center justify-center p-6 rounded-[2.5rem] border border-pro-border shadow-pro transition-colors duration-75 overflow-hidden ${calibrationState !== 'idle' ? 'bg-primary/5 border-primary' : feedback.type === 'success' ? 'bg-success/[0.04]' : feedback.type === 'error' ? 'bg-danger/[0.04]' : 'bg-pro-card'}`}>
             
             {showGuide ? (
-              <div className="flex flex-col items-center justify-center h-full w-full animate-in fade-in zoom-in duration-300 max-w-2xl mx-auto z-10">
-                <div className="flex justify-between w-full mb-6">
-                  <div className="text-pro-accent font-black uppercase tracking-widest text-xs">Recommended Workflow</div>
-                  <div className="text-pro-muted font-bold text-xs">{guideSlide + 1} / {guideContent.length}</div>
+              <div className="flex flex-col justify-center items-center h-full w-full animate-in fade-in zoom-in duration-300 max-w-xl mx-auto z-10">
+                <div className="flex justify-between w-full mb-3 px-2">
+                  <div className="text-pro-accent font-black uppercase tracking-widest text-[10px]">HOW TO USE</div>
+                  <div className="text-pro-muted font-bold text-[10px]">{guideSlide + 1} / {guideContent.length}</div>
                 </div>
                 
-                <h2 className="text-3xl md:text-4xl font-black text-center mb-6 text-pro-text">{guideContent[guideSlide].title}</h2>
-                
-                <div className="text-base md:text-lg text-pro-muted leading-relaxed whitespace-pre-wrap flex-1 flex items-center mb-8">
-                  {guideContent[guideSlide].content}
+                <div className="w-full bg-pro-bg/40 p-6 md:p-8 rounded-3xl border border-pro-border/50 text-left flex flex-col gap-4 shadow-inner">
+                  <h2 className="text-2xl md:text-3xl font-black text-pro-text">{guideContent[guideSlide].title}</h2>
+                  <div className="text-sm md:text-base text-pro-muted leading-relaxed whitespace-pre-wrap">
+                    {guideContent[guideSlide].content}
+                  </div>
                 </div>
 
-                <div className="flex justify-between items-center w-full mt-4 gap-4">
+                <div className="flex justify-between items-center w-full mt-6 gap-4">
                   <button 
                     onClick={() => guideSlide > 0 ? setGuideSlide(s => s - 1) : closeGuide()} 
-                    className="flex-1 py-4 rounded-2xl bg-pro-bg border border-pro-border text-pro-muted font-black uppercase text-xs tracking-widest transition-all hover:border-pro-muted"
+                    className="flex-1 py-3 rounded-2xl bg-pro-bg border border-pro-border text-pro-muted font-black uppercase text-[10px] tracking-widest transition-all hover:border-pro-muted hover:bg-pro-card cursor-pointer"
                   >
                     {guideSlide > 0 ? 'Previous' : 'Skip Guide'}
                   </button>
                   <button 
                     onClick={() => guideSlide < guideContent.length - 1 ? setGuideSlide(s => s + 1) : closeGuide()} 
-                    className="flex-1 py-4 rounded-2xl bg-pro-accent text-white font-black uppercase text-xs tracking-widest shadow-xl shadow-pro-accent/20 transition-all hover:scale-[1.02]"
+                    className="flex-1 py-3 rounded-2xl bg-pro-accent text-white font-black uppercase text-[10px] tracking-widest shadow-lg shadow-pro-accent/20 transition-all hover:scale-[1.02] cursor-pointer"
                   >
                     {guideSlide < guideContent.length - 1 ? 'Next' : 'Start Training'}
                   </button>
