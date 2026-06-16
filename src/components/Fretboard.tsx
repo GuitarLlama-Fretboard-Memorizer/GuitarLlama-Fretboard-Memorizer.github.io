@@ -44,7 +44,7 @@ export const Fretboard: React.FC<FretboardProps> = ({
     <div className="w-full">
       <svg 
         viewBox={`0 0 ${width} ${height}`} 
-        className="w-full h-auto"
+        className="w-full h-auto min-w-[700px] lg:min-w-full"
         preserveAspectRatio="xMidYMid meet"
       >
         <rect x={marginX} y={marginY} width={neckWidth} height={neckHeight} fill="#111" rx="2" />

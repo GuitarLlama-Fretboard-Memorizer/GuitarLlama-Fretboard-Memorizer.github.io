@@ -381,13 +381,13 @@ export default function Home() {
   if (!isLoaded) return <div className="h-screen bg-pro-bg flex items-center justify-center font-sans"><div className="text-pro-muted font-black animate-pulse uppercase tracking-[0.3em]">Neural Engine Loading...</div></div>;
 
   return (
-    <div className="min-h-screen bg-pro-bg text-pro-text flex flex-col p-4 font-sans">
-      <header className="flex justify-between items-center mb-4 px-2">
-        <div className="flex items-center gap-3 select-none pointer-events-none">
+    <div className="min-h-[100dvh] lg:h-screen bg-pro-bg text-pro-text flex flex-col p-2 md:p-4 overflow-x-hidden font-sans">
+      <header className="flex flex-col md:flex-row justify-between items-center mb-6 px-2 gap-4 md:gap-0">
+        <div className="flex items-center justify-between w-full md:w-auto gap-3 select-none pointer-events-none">
           <Image src="/logo.png" alt="Guitar Llama Logo" width={180} height={40} className="object-contain" />
-          <h1 className="text-xl md:text-2xl font-black tracking-tighter uppercase cursor-default"><span className="text-gradient font-black">FRETBOARD MEMORIZER</span></h1>
+          <h1 className="text-xl md:text-2xl font-black tracking-tighter uppercase cursor-default hidden sm:block"><span className="text-gradient font-black">FRETBOARD MEMORIZER</span></h1>
         </div>
-        <div className="flex items-center gap-4 relative z-50">
+        <div className="flex flex-wrap justify-center items-center gap-2 md:gap-4 relative z-50">
           <button 
             onClick={() => { setGuideSlide(0); setShowGuide(true); }}
             className="px-4 py-1.5 rounded-full text-sm font-black tracking-widest border transition-all cursor-pointer bg-pro-card border-pro-border text-pro-muted hover:border-pro-text hover:text-pro-text"
@@ -433,8 +433,8 @@ export default function Home() {
         </p>
       </div>
 
-      <main className="flex-1 grid grid-cols-12 gap-4 min-h-0">
-        <div className="col-span-3 flex flex-col gap-4 min-h-0 overflow-y-auto pr-1 custom-scrollbar">
+      <main className="flex-1 flex flex-col lg:grid lg:grid-cols-12 gap-4 min-h-0 lg:overflow-hidden">
+        <div className="order-2 lg:order-1 lg:col-span-3 flex flex-col gap-4 min-h-0 lg:overflow-y-auto pr-1 custom-scrollbar">
           <section className="bg-pro-card p-5 rounded-2xl border border-pro-border shadow-pro">
             <h2 className="text-sm font-black text-pro-muted uppercase tracking-widest mb-4 flex items-center gap-2"><span className="w-1 h-3 bg-pro-accent rounded-full"></span>Training Focus</h2>
             <div className="flex flex-col gap-5">
@@ -497,7 +497,7 @@ export default function Home() {
           </section>
         </div>
 
-        <div className="col-span-9 flex flex-col gap-4 min-h-0">
+        <div className="order-1 lg:order-2 lg:col-span-9 flex flex-col gap-4 min-h-0">
           <div className={`flex-1 relative flex flex-col items-center justify-center p-6 rounded-[2.5rem] border border-pro-border shadow-pro transition-colors duration-75 overflow-hidden ${calibrationState !== 'idle' ? 'bg-primary/5 border-primary' : feedback.type === 'success' ? 'bg-success/[0.04]' : feedback.type === 'error' ? 'bg-danger/[0.04]' : 'bg-pro-card'}`}>
             
             {showGuide ? (
@@ -616,12 +616,11 @@ export default function Home() {
                   )}
                   </div>
 
-                  <div className="bg-pro-card rounded-3xl border border-pro-border p-5 shadow-pro relative overflow-hidden group">
-                  <div className="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-pro-accent/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                  <Fretboard highlightedFret={currentPrompt ? { string: currentPrompt.string, fret: currentPrompt.fret } : null} activeNote={(tuner.detectedNoteName && currentPrompt && tuner.detectedNoteName.replace(/-?\d+$/, '') === currentPrompt.noteName) ? { string: currentPrompt.string, fret: currentPrompt.fret } : null} masteryData={masteryScores} showHeatmap={settings.showHeatmap} fretRange={settings.fretRange} />
+                  <div className="bg-pro-card rounded-3xl border border-pro-border p-4 md:p-5 shadow-pro relative overflow-x-auto group custom-scrollbar">
+                     <div className="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-pro-accent/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                     <Fretboard highlightedFret={currentPrompt ? { string: currentPrompt.string, fret: currentPrompt.fret } : null} activeNote={(tuner.detectedNoteName && currentPrompt && tuner.detectedNoteName.replace(/-?\d+$/, '') === currentPrompt.noteName) ? { string: currentPrompt.string, fret: currentPrompt.fret } : null} masteryData={masteryScores} showHeatmap={settings.showHeatmap} fretRange={settings.fretRange} />
                   </div>
-
-                  <div className="grid grid-cols-3 gap-6 mb-2 relative z-50">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6 mb-2 relative z-50">
                      <div className="group relative bg-pro-card py-4 px-6 rounded-2xl border border-pro-border flex justify-between items-center shadow-sm cursor-help">
                        <span className="text-xs font-black text-pro-muted uppercase tracking-[0.2em] opacity-60 group-hover:text-pro-text transition-colors">Iteration</span>
                        <span className="text-xl font-black tracking-tight">{currentQuestionIndex} <span className="text-pro-muted text-sm">/ {settings.questionsPerRound}</span></span>
