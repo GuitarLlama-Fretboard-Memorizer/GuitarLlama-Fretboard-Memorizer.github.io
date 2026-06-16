@@ -390,9 +390,9 @@ export default function Home() {
         <div className="flex items-center gap-4">
           <button 
             onClick={() => { setGuideSlide(0); setShowGuide(true); }}
-            className="px-4 py-1.5 rounded-full text-xs font-black tracking-widest border transition-all cursor-pointer bg-pro-card border-pro-border text-pro-muted hover:border-pro-text hover:text-pro-text"
+            className="px-4 py-1.5 rounded-full text-sm font-black tracking-widest border transition-all cursor-pointer bg-pro-card border-pro-border text-pro-muted hover:border-pro-text hover:text-pro-text"
           >
-            GUIDE
+            HOW TO USE
           </button>
           
           <button 
@@ -590,7 +590,7 @@ export default function Home() {
                   ) : !tuner.isRunning ? (
                     <button onClick={tuner.start} disabled={tuner.isInitializing} className={`w-full py-4 rounded-3xl font-black uppercase text-base tracking-[0.2em] shadow-2xl transition-all active:scale-95 flex items-center justify-center gap-3 ${tuner.isInitializing ? 'bg-pro-border text-pro-muted cursor-wait' : 'bg-pro-text text-pro-card cursor-pointer hover:scale-[1.02] shadow-pro-accent/10'}`}>
                       {tuner.isInitializing && <div className="w-3 h-3 border-2 border-pro-muted border-t-pro-accent rounded-full animate-spin"></div>}
-                      {tuner.isInitializing ? 'Connecting...' : 'Start Microphone'}
+                      {tuner.isInitializing ? 'Connecting...' : 'Start Training'}
                     </button>
                   ) : (
                     <div className="flex flex-col gap-3 w-full">
