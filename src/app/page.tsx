@@ -344,14 +344,6 @@ export default function Home() {
     updateSetting('activeStrings', newStrings);
   };
 
-  const handleHeatmapToggle = () => {
-    if (typeof window !== 'undefined' && window.innerWidth < 1024) {
-      alert("Rotate your device sideways (Landscape mode) to view the interactive Fretboard and Mastery Heatmap!");
-      return;
-    }
-    updateSetting('showHeatmap', !settings.showHeatmap);
-  };
-
   const confidenceScore = useMemo(() => {
      let sum = 0;
      let count = 0;
@@ -410,12 +402,10 @@ export default function Home() {
           >
             RESET CACHE
           </button>
-          
           <div className="relative group flex items-center h-full">
             <button 
-              onClick={handleHeatmapToggle} 
+              onClick={() => updateSetting('showHeatmap', !settings.showHeatmap)} 
               className={`px-4 py-1.5 rounded-full text-sm font-black tracking-widest border transition-all cursor-pointer ${settings.showHeatmap ? 'bg-success/10 border-success text-success shadow-[0_0_15px_rgba(16,185,129,0.2)]' : 'bg-pro-card border-pro-border text-pro-muted hover:border-pro-accent hover:text-pro-accent'}`}
-              title="Toggle fretboard mastery heatmap overlay"
             >
               HEATMAP
             </button>
