@@ -434,8 +434,8 @@ export default function Home() {
         </p>
       </div>
 
-      <main className="flex-1 flex flex-col lg:grid lg:grid-cols-12 gap-4 min-h-0 lg:overflow-hidden">
-        <div className="order-2 lg:order-1 lg:col-span-3 flex flex-col gap-4 min-h-0 lg:overflow-y-auto pr-1 custom-scrollbar">
+      <main className="flex-1 flex flex-col md:grid md:grid-cols-12 gap-4 min-h-0 md:overflow-hidden">
+        <div className="order-2 md:order-1 md:col-span-4 lg:col-span-3 flex flex-col gap-4 min-h-0 md:overflow-y-auto pr-1 custom-scrollbar">
           <section className="bg-pro-card p-5 rounded-2xl border border-pro-border shadow-pro">
             <h2 className="text-sm font-black text-pro-muted uppercase tracking-widest mb-4 flex items-center gap-2"><span className="w-1 h-3 bg-pro-accent rounded-full"></span>Training Focus</h2>
             <div className="flex flex-col gap-5">
@@ -479,8 +479,8 @@ export default function Home() {
                   ))}
                 </select>
               </div>
-              <div className="space-y-1"><div className="flex justify-between text-xs font-bold uppercase"><span>Gain</span><span className="text-primary">{settings.micGain}x</span></div><input type="range" min="1" max="20" value={settings.micGain} onChange={e => updateSetting('micGain', parseFloat(e.target.value))} className="accent-primary w-full h-1 bg-pro-bg rounded-full cursor-pointer transition-all" /></div>
-              <div className="space-y-1"><div className="flex justify-between text-xs font-bold uppercase"><span>Gate</span><span className="text-primary">{settings.noiseGateThreshold}%</span></div><input type="range" min="1" max="40" value={settings.noiseGateThreshold} onChange={e => updateSetting('noiseGateThreshold', parseFloat(e.target.value))} className="accent-primary w-full h-1 bg-pro-bg rounded-full cursor-pointer transition-all" /></div>
+              <div className="space-y-1"><div className="flex justify-between text-xs font-bold uppercase"><span>Gain</span><span className="text-primary">{settings.micGain}x</span></div><input type="range" min="1" max="20" value={settings.micGain} onChange={e => updateSetting('micGain', parseFloat(e.target.value))} className="accent-pro-accent w-full h-1 bg-pro-bg rounded-full cursor-pointer transition-all" /></div>
+              <div className="space-y-1"><div className="flex justify-between text-xs font-bold uppercase"><span>Gate</span><span className="text-primary">{settings.noiseGateThreshold}%</span></div><input type="range" min="1" max="40" value={settings.noiseGateThreshold} onChange={e => updateSetting('noiseGateThreshold', parseFloat(e.target.value))} className="accent-pro-accent w-full h-1 bg-pro-bg rounded-full cursor-pointer transition-all" /></div>
               <div className="relative h-3 bg-pro-bg rounded-full overflow-hidden border border-pro-border p-0.5 mt-1">
                 <div className="absolute top-0 bottom-0 w-[1.5px] bg-danger z-10 shadow-[0_0_5px_rgba(239,68,68,0.5)]" style={{ left: `${settings.noiseGateThreshold}%` }} />
                 <div className={`h-full rounded-full transition-all duration-75 ${tuner.currentVolumePercent >= settings.noiseGateThreshold ? 'bg-success shadow-[0_0_10px_rgba(16,185,129,0.4)]' : 'bg-warning/40 opacity-50'}`} style={{ width: `${tuner.currentVolumePercent}%` }} />
@@ -498,7 +498,7 @@ export default function Home() {
           </section>
         </div>
 
-        <div className="order-1 lg:order-2 lg:col-span-9 flex flex-col gap-4 min-h-0">
+        <div className="order-1 md:order-2 md:col-span-8 lg:col-span-9 flex flex-col gap-4 min-h-0">
           <div className={`flex-1 relative flex flex-col items-center justify-center p-6 rounded-[2.5rem] border border-pro-border shadow-pro transition-colors duration-75 overflow-hidden ${calibrationState !== 'idle' ? 'bg-primary/5 border-primary' : feedback.type === 'success' ? 'bg-success/[0.04]' : feedback.type === 'error' ? 'bg-danger/[0.04]' : 'bg-pro-card'}`}>
             
             {showGuide ? (
