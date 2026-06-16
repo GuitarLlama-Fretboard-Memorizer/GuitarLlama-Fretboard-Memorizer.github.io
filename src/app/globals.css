@@ -1,3 +1,43 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #6366f1; /* Modern Indigo */
+  --color-success: #10b981; /* Emerald */
+  --color-danger: #ef4444;  /* Rose */
+  --color-warning: #f59e0b; /* Amber */
+  
+  --color-pro-bg: #f8fafc;    /* Light Slate background */
+  --color-pro-card: #ffffff;  /* White cards */
+  --color-pro-border: #e2e8f0; /* Light borders */
+  --color-pro-text: #1e293b;   /* Dark Slate text */
+  --color-pro-muted: #64748b;  /* Muted Slate */
+  --color-pro-accent: #6366f1;
+  
+  --shadow-pro: 0 10px 25px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+:root {
+  --background: var(--color-pro-bg);
+  --foreground: var(--color-pro-text);
+}
+
+body {
+  background-color: var(--color-pro-bg);
+  color: var(--color-pro-text);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Sophisticated gradients for the "Pro" feel */
+.bg-glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, #4f46e5 0%, #06b6d4 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
