@@ -393,7 +393,7 @@ export default function Home() {
       <header className="flex flex-col md:flex-row justify-between items-center mb-6 px-2 gap-4 md:gap-0">
         <div className="flex items-center justify-between w-full md:w-auto gap-3 select-none pointer-events-none">
           <Image src="/logo.png" alt="Guitar Llama Logo" width={180} height={40} className="object-contain" />
-          <h1 className="text-xl md:text-2xl font-black tracking-tighter uppercase cursor-default hidden sm:block"><span className="text-gradient font-black">FRETBOARD MEMORIZER</span></h1>
+          <h1 className="text-lg sm:text-xl md:text-2xl font-black tracking-tighter uppercase cursor-default"><span className="text-gradient font-black">FRETBOARD MEMORIZER</span></h1>
         </div>
         <div className="flex flex-wrap justify-center items-center gap-2 md:gap-4 relative z-50">
           <button 
