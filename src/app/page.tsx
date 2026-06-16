@@ -372,7 +372,7 @@ export default function Home() {
     },
     {
       title: "Calibrate",
-      content: "Before you start, click the CALIBRATE button in the bottom left.\n\nThe neural engine needs to learn your room's noise floor and your guitar's peak output volume to accurately track your fretboard."
+      content: "Before you start, click the CALIBRATE button below.\n\nThe neural engine needs to learn your room's noise floor and your guitar's peak output volume to accurately track your fretboard."
     }
   ];
 
@@ -514,10 +514,17 @@ export default function Home() {
                     {guideSlide > 0 ? 'Previous' : 'Skip Guide'}
                   </button>
                   <button 
-                    onClick={() => guideSlide < guideContent.length - 1 ? setGuideSlide(s => s + 1) : closeGuide()} 
+                    onClick={() => {
+                      if (guideSlide < guideContent.length - 1) {
+                        setGuideSlide(s => s + 1);
+                      } else {
+                        closeGuide();
+                        startCalibration();
+                      }
+                    }} 
                     className="flex-1 py-3 rounded-2xl bg-pro-accent text-white font-black uppercase text-[10px] tracking-widest shadow-lg shadow-pro-accent/20 transition-all hover:scale-[1.02] cursor-pointer"
                   >
-                    {guideSlide < guideContent.length - 1 ? 'Next' : 'Start Training'}
+                    {guideSlide < guideContent.length - 1 ? 'Next' : 'Calibrate'}
                   </button>
                 </div>
               </div>
