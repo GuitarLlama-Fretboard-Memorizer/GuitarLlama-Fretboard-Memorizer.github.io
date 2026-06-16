@@ -1,36 +1,66 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# GuitarLlama | Fretboard Memorizer
 
-## Getting Started
+![GuitarLlama Logo](public/logo.png)
 
-First, run the development server:
+**GuitarLlama | Fretboard Memorizer** is a high-fidelity, neural instrument trainer designed to help guitarists master the fretboard with surgical precision. Unlike traditional quiz apps, it listens to your **real guitar** through your microphone and uses a custom-built neural spaced-repetition engine to optimize your memorization.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 🚀 Key Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 🧠 Neuro-Logic SRS Engine
+Master the neck faster using our advanced **Spaced Repetition System (SRS)**. The engine tracks your stability, response time (latency), and accuracy for every single fret across all 6 strings. It intelligently prioritizes your "blind spots" without repeating the same note twice in a row.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 🎸 Neural Pitch Detection
+Built with a highly-tuned autocorrelation algorithm, the engine is **Octave-Aware**. It distinguishes between your Low E (6th string) and High E (1st string), ensuring you aren't just learning note names, but absolute fret positions.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 🎯 Training Scopes
+Tailor your session to your current skill level:
+*   **Fret Span**: Focus on specific areas (e.g., Frets 0-5 for beginners, or 12-22 for advanced mastery).
+*   **Natural Notes Only**: Master the core naturals before introducing accidentals (#/b).
+*   **String Selection**: Isolate individual strings or practice across the entire set.
 
-## Learn More
+### ⚡ Interactive Auto-Calibration
+Set up your perfect audio pipeline in seconds. The 3-step calibration flow establishs your room's noise floor and verifies your instrument's range (Low E to High E), automatically setting your optimal Mic Gain and Noise Gate.
 
-To learn more about Next.js, take a look at the following resources:
+### 🗺️ Mastery Heatmap
+Visualize your progress with an interactive heatmap overlay. Watch your fretboard turn from "Learning Red" to "Mastered Green" as your neural stability increases.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🛠️ Tech Stack
 
-## Deploy on Vercel
+*   **Framework**: [Next.js 15+](https://nextjs.org/) (App Router)
+*   **Language**: [TypeScript](https://www.typescriptlang.org/)
+*   **Styling**: [Tailwind CSS v4](https://tailwindcss.com/)
+*   **Audio**: Web Audio API (Native Autocorrelation)
+*   **Testing**: [Jest](https://jestjs.io/) & React Testing Library
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 💻 Getting Started
+
+### Prerequisites
+*   Node.js 20+
+*   Volta (Recommended for version locking)
+
+### Installation
+1. Clone the repository
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Run the development server:
+   ```bash
+   npm run dev
+   ```
+4. Open [http://localhost:3000](http://localhost:3000) and grant microphone permissions to begin.
+
+---
+
+## 🌐 SEO & Ranking
+This application is optimized to be the #1 **guitar fretboard memorization app**.
+*   **Keywords**: guitar fretboard memorization app, guitar fret note memorizer app, learn guitar notes, fretboard trainer, guitar neck master.
+
+---
+
+## 📄 License
+Part of the **GuitarLlama** ecosystem. All rights reserved.
