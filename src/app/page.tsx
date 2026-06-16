@@ -320,11 +320,18 @@ export default function Home() {
   };
 
   const confidenceScore = useMemo(() => {
-     const totalPossible = (settings.activeStrings.length * (settings.fretRange[1] - settings.fretRange[0] + 1));
-     if (totalPossible === 0) return 0;
      let sum = 0;
-     settings.activeStrings.forEach(str => { for(let f=settings.fretRange[0]; f<=settings.fretRange[1]; f++) sum += masteryScores[`${str}-${f}`] || 0; });
-     return Math.floor((sum / totalPossible) * 100);
+     let count = 0;
+     settings.activeStrings.forEach(str => {
+       for(let f=settings.fretRange[0]; f<=settings.fretRange[1]; f++) {
+         const info = getNoteAt(str, f);
+         if (settings.naturalsOnly && info.noteName.includes('#')) continue;
+         sum += masteryScores[`${str}-${f}`] || 0;
+         count++;
+       }
+     });
+     if (count === 0) return 0;
+     return Math.floor((sum / count) * 100);
   }, [masteryScores, settings]);
 
   if (!isLoaded) return <div className="h-screen bg-pro-bg flex items-center justify-center font-sans"><div className="text-pro-muted font-black animate-pulse uppercase tracking-[0.3em]">Neural Engine Loading...</div></div>;
