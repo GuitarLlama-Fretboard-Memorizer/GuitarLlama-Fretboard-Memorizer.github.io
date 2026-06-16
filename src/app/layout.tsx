@@ -13,6 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://guitarllama-fretboard-memorizer.github.io'),
   title: "GuitarLlama | Fretboard Memorizer",
   description: "The ultimate guitar fretboard memorization app. Master the guitar neck, learn fret notes instantly, and improve your neural stability with our interactive fret note memorizer.",
   keywords: "guitar fretboard memorization app, guitar fret note memorizer app, learn guitar notes, fretboard trainer, guitar neck master, interactive guitar fretboard, spaced repetition guitar",
@@ -20,7 +21,22 @@ export const metadata: Metadata = {
     title: "GuitarLlama | Fretboard Memorizer",
     description: "The ultimate guitar fretboard memorization app. Master the guitar neck and learn fret notes instantly.",
     type: "website",
-  }
+    url: "https://guitarllama-fretboard-memorizer.github.io",
+    images: [
+      {
+        url: "/logo.png",
+        width: 800,
+        height: 800,
+        alt: "GuitarLlama Logo",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "GuitarLlama | Fretboard Memorizer",
+    description: "The ultimate guitar fretboard memorization app. Master the guitar neck and learn fret notes instantly.",
+    images: ["/logo.png"],
+  },
 };
 
 export default function RootLayout({
