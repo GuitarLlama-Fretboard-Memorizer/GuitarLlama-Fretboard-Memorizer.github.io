@@ -363,15 +363,15 @@ export default function Home() {
       content: "Most players try to learn the neck by counting up the frets (A... A#... B... C). This is too slow for real playing.\n\nThis trainer jumps you around the neck unpredictably. By forcing you to find notes out of order, you stop counting and start building instant muscle memory."
     },
     {
-      title: "Step 1: Isolate Strings",
+      title: "Isolate Strings",
       content: "Focus on one string at a time to build your foundational map.\n\n• Toggle Natural Only ON.\n• Set Fret Span to 0 — 11.\n• Start with String 6 (Low E) and reach 100% Mastery before moving to String 5 (A)."
     },
     {
-      title: "Step 2: Connect the Map",
-      content: "Once individual strings are clear, start connecting them vertically.\n\n• Select 3 adjacent strings at a time.\n• Keep Fret Span at 0 — 11 (the neck repeats at fret 12).\n• Toggle Natural Only OFF to find and fix your blind spots."
+      title: "Connect the Map",
+      content: "Once individual strings are clear, start connecting them vertically.\n\n• Select 3 adjacent strings at a time.\n• Keep Fret Span at 0 — 11 (the neck repeats at fret 12).\n• Toggle Natural Only OFF to find and fix your blind spots.\n• Eventually, expand to all 6 strings at once."
     },
     {
-      title: "Step 3: Calibrate",
+      title: "Calibrate",
       content: "Before you start, click the CALIBRATE button in the bottom left.\n\nThe neural engine needs to learn your room's noise floor and your guitar's peak output volume to accurately track your fretboard."
     }
   ];
