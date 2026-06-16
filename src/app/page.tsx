@@ -544,10 +544,9 @@ export default function Home() {
                        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 w-64 p-3 bg-pro-text text-pro-bg text-xs font-bold rounded-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50 pointer-events-none shadow-2xl leading-relaxed">
                          <div className="mb-1 text-pro-accent uppercase tracking-tighter">Memorization Mastery</div>
                          <ul className="space-y-1 opacity-90">
-                           <li><span className="text-success">85-100%</span>: Proficient (Instant recall)</li>
-                           <li><span className="text-warning">60-84%</span>: Improving (Know notes, but thinking)</li>
-                           <li><span className="text-danger">0-59%</span>: Learning (Counting or guessing)</li>
-                         </ul>
+                           <li><span className="text-success">85-100%</span>: Proficient (Recall under 5s)</li>
+                           <li><span className="text-warning">60-84%</span>: Improving (Recall under 10s)</li>
+                           <li><span className="text-danger">0-59%</span>: Learning (Looking down or guessing)</li>                         </ul>
                          <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-pro-text"></div>
                        </div>
                      </div>                  </div>        </div>
