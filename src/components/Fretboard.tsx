@@ -77,6 +77,11 @@ export const Fretboard: React.FC<FretboardProps> = ({
           </g>
         ))}
 
+        {/* Heatmap for Open Strings (Fret 0) */}
+        {showHeatmap && startFret === 0 && strings.map(str => (
+          <circle key={`heat-open-${str}`} cx={margin - 8} cy={margin + (str - 1) * stringSpacing} r="5" fill={getMasteryColor(str, 0)} fillOpacity="0.8" />
+        ))}
+
         {showHeatmap && Array.from({ length: numFrets }).map((_, f) => {
           const fretNum = startFret + f + 1;
           return strings.map(str => (
@@ -85,13 +90,35 @@ export const Fretboard: React.FC<FretboardProps> = ({
         })}
 
         {highlightedFret && highlightedFret.fret >= startFret && highlightedFret.fret <= endFret && (
-          <circle cx={margin + (highlightedFret.fret - startFret - 0.5) * fretSpacing} cy={margin + (highlightedFret.string - 1) * stringSpacing} r="10" fill="transparent" stroke="#6366f1" strokeWidth="2" className="animate-pulse" />
+          <circle 
+            cx={highlightedFret.fret === 0 ? margin - 8 : margin + (highlightedFret.fret - startFret - 0.5) * fretSpacing} 
+            cy={margin + (highlightedFret.string - 1) * stringSpacing} 
+            r="10" 
+            fill="transparent" 
+            stroke="#6366f1" 
+            strokeWidth="2" 
+            className="animate-pulse" 
+          />
         )}
 
         {activeNote && activeNote.fret >= startFret && activeNote.fret <= endFret && (
           <g>
-            <circle cx={margin + (activeNote.fret - startFret - 0.5) * fretSpacing} cy={margin + (activeNote.string - 1) * stringSpacing} r="8" fill={highlightedFret?.string === activeNote.string && highlightedFret?.fret === activeNote.fret ? "#10b981" : "#ef4444"} />
-            <text x={margin + (activeNote.fret - startFret - 0.5) * fretSpacing} y={margin + (activeNote.string - 1) * stringSpacing + 3} textAnchor="middle" fontSize="8" fontWeight="bold" fill="white">✓</text>
+            <circle 
+              cx={activeNote.fret === 0 ? margin - 8 : margin + (activeNote.fret - startFret - 0.5) * fretSpacing} 
+              cy={margin + (activeNote.string - 1) * stringSpacing} 
+              r="8" 
+              fill={highlightedFret?.string === activeNote.string && highlightedFret?.fret === activeNote.fret ? "#10b981" : "#ef4444"} 
+            />
+            <text 
+              x={activeNote.fret === 0 ? margin - 8 : margin + (activeNote.fret - startFret - 0.5) * fretSpacing} 
+              y={margin + (activeNote.string - 1) * stringSpacing + 3} 
+              textAnchor="middle" 
+              fontSize="8" 
+              fontWeight="bold" 
+              fill="white"
+            >
+              ✓
+            </text>
           </g>
         )}
       </svg>
