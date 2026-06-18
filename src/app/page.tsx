@@ -502,24 +502,27 @@ export default function Home() {
           <div className={`flex-1 relative flex flex-col items-center justify-center p-4 landscape:p-2 lg:p-6 rounded-3xl lg:rounded-[2.5rem] border border-pro-border shadow-pro transition-colors duration-75 overflow-y-auto custom-scrollbar ${calibrationState !== 'idle' ? 'bg-primary/5 border-primary' : feedback.type === 'success' ? 'bg-success/[0.04]' : feedback.type === 'error' ? 'bg-danger/[0.04]' : 'bg-pro-card'}`}>
             
             {showGuide ? (
-              <div className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-pro-card p-[clamp(0.5rem,3cqh,1.5rem)] @container overflow-hidden animate-in fade-in zoom-in duration-300">
-                <div className="w-full flex flex-col justify-center items-center h-full max-w-xl mx-auto py-[clamp(0.25rem,2cqh,0.5rem)]">
-                  <div className="flex justify-between w-full mb-[clamp(0.25rem,2cqh,0.75rem)] px-2">
-                    <div className="text-pro-accent font-black uppercase tracking-widest text-[clamp(8px,1.5cqh,10px)]">HOW TO USE</div>
-                    <div className="text-pro-muted font-bold text-[clamp(8px,1.5cqh,10px)]">{guideSlide + 1} / {guideContent.length}</div>
+              <div 
+                className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-pro-card p-[4cqmin] overflow-hidden animate-in fade-in zoom-in duration-300"
+                style={{ containerType: 'size' }}
+              >
+                <div className="w-full h-full flex flex-col justify-center max-w-2xl mx-auto py-[2cqmin]">
+                  <div className="flex justify-between w-full mb-[2cqmin] px-[2cqmin]">
+                    <div className="text-pro-accent font-black uppercase tracking-widest text-[2cqmin]">HOW TO USE</div>
+                    <div className="text-pro-muted font-bold text-[2cqmin]">{guideSlide + 1} / {guideContent.length}</div>
                   </div>
                   
-                  <div className="w-full bg-pro-bg/40 p-[clamp(0.75rem,4cqh,2rem)] rounded-[clamp(1rem,4cqh,1.5rem)] border border-pro-border/50 text-left flex flex-col gap-[clamp(0.5rem,2cqh,1rem)] shadow-inner">
-                    <h2 className="font-black text-pro-text text-[clamp(1rem,4.5cqh,1.875rem)] leading-tight">{guideContent[guideSlide].title}</h2>
-                    <div className="text-pro-muted whitespace-pre-wrap text-[clamp(0.65rem,2.5cqh,1rem)] leading-[clamp(1rem,3.5cqh,1.625rem)]">
+                  <div className="w-full bg-pro-bg/40 p-[5cqmin] rounded-[3cqmin] border border-pro-border/50 text-left flex flex-col gap-[2cqmin] shadow-inner mt-auto mb-auto">
+                    <h2 className="font-black text-pro-text text-[5cqmin] leading-tight">{guideContent[guideSlide].title}</h2>
+                    <div className="text-pro-muted whitespace-pre-wrap text-[3cqmin] leading-[4.5cqmin]">
                       {guideContent[guideSlide].content}
                     </div>
                   </div>
 
-                  <div className="flex justify-between items-center w-full mt-[clamp(0.5rem,3cqh,1.5rem)] gap-[clamp(0.5rem,2cqw,1rem)]">
+                  <div className="flex justify-between items-center w-full mt-[4cqmin] gap-[3cqmin]">
                     <button 
                       onClick={() => guideSlide > 0 ? setGuideSlide(s => s - 1) : closeGuide()} 
-                      className="flex-1 py-[clamp(0.4rem,2.5cqh,0.75rem)] rounded-[clamp(0.5rem,2.5cqh,1rem)] bg-pro-bg border border-pro-border text-pro-muted font-black uppercase text-[clamp(8px,1.5cqh,10px)] tracking-widest transition-all hover:border-pro-muted hover:bg-pro-card cursor-pointer"
+                      className="flex-1 py-[3cqmin] rounded-[2cqmin] bg-pro-bg border border-pro-border text-pro-muted font-black uppercase text-[2.5cqmin] tracking-widest transition-all hover:border-pro-muted hover:bg-pro-card cursor-pointer"
                     >
                       {guideSlide > 0 ? 'Previous' : 'Skip Guide'}
                     </button>
@@ -532,7 +535,7 @@ export default function Home() {
                           startCalibration();
                         }
                       }} 
-                      className="flex-1 py-[clamp(0.4rem,2.5cqh,0.75rem)] rounded-[clamp(0.5rem,2.5cqh,1rem)] bg-pro-accent text-white font-black uppercase text-[clamp(8px,1.5cqh,10px)] tracking-widest shadow-[0_4px_14px_rgba(99,102,241,0.2)] transition-all hover:scale-[1.02] cursor-pointer"
+                      className="flex-1 py-[3cqmin] rounded-[2cqmin] bg-pro-accent text-white font-black uppercase text-[2.5cqmin] tracking-widest shadow-[0_4px_14px_rgba(99,102,241,0.2)] transition-all hover:scale-[1.02] cursor-pointer"
                     >
                       {guideSlide < guideContent.length - 1 ? 'Next' : 'Calibrate'}
                     </button>
