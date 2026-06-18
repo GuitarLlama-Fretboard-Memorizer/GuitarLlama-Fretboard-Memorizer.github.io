@@ -381,7 +381,7 @@ export default function Home() {
   if (!isLoaded) return <div className="h-screen bg-pro-bg flex items-center justify-center font-sans"><div className="text-pro-muted font-black animate-pulse uppercase tracking-[0.3em]">Neural Engine Loading...</div></div>;
 
   return (
-    <div className="min-h-[100dvh] lg:h-screen bg-pro-bg text-pro-text flex flex-col p-2 md:p-4 overflow-x-hidden font-sans">
+    <div className="min-h-[100dvh] bg-pro-bg text-pro-text flex flex-col p-2 md:p-4 overflow-x-hidden font-sans">
       <header className="flex flex-col md:flex-row justify-between items-center mb-6 px-2 gap-4 md:gap-0">
         <div className="flex items-center justify-between w-full md:w-auto gap-3 select-none pointer-events-none">
           <Image src="/logo.png" alt="Guitar Llama Logo" width={180} height={40} className="object-contain flex-shrink-0" />
@@ -434,7 +434,7 @@ export default function Home() {
         </p>
       </div>
 
-      <main className="flex-1 flex flex-col md:grid md:grid-cols-12 gap-4 min-h-0 md:overflow-hidden">
+      <main className="flex-1 flex flex-col md:grid md:grid-cols-12 gap-4 min-h-0">
         <div className="order-2 md:order-1 md:col-span-4 lg:col-span-3 flex flex-col gap-4 min-h-0 md:overflow-y-auto pr-1 custom-scrollbar">
           <section className="bg-pro-card p-5 rounded-2xl border border-pro-border shadow-pro">
             <h2 className="text-sm font-black text-pro-muted uppercase tracking-widest mb-4 flex items-center gap-2"><span className="w-1 h-3 bg-pro-accent rounded-full"></span>Training Focus</h2>
@@ -498,31 +498,28 @@ export default function Home() {
           </section>
         </div>
 
-        <div className="order-1 md:order-2 md:col-span-8 lg:col-span-9 flex flex-col gap-2 md:gap-4 min-h-0">
-          <div className={`flex-1 relative flex flex-col items-center justify-center p-4 landscape:p-2 lg:p-6 rounded-3xl lg:rounded-[2.5rem] border border-pro-border shadow-pro transition-colors duration-75 overflow-y-auto custom-scrollbar ${calibrationState !== 'idle' ? 'bg-primary/5 border-primary' : feedback.type === 'success' ? 'bg-success/[0.04]' : feedback.type === 'error' ? 'bg-danger/[0.04]' : 'bg-pro-card'}`}>
+        <div className="order-1 md:order-2 md:col-span-8 lg:col-span-9 flex flex-col gap-2 md:gap-4 min-h-[50vh] md:min-h-0">
+          <div className={`flex-1 relative flex flex-col items-center justify-center p-4 landscape:p-2 lg:p-6 rounded-3xl lg:rounded-[2.5rem] border border-pro-border shadow-pro transition-colors duration-75 overflow-hidden ${calibrationState !== 'idle' ? 'bg-primary/5 border-primary' : feedback.type === 'success' ? 'bg-success/[0.04]' : feedback.type === 'error' ? 'bg-danger/[0.04]' : 'bg-pro-card'}`}>
             
             {showGuide ? (
-              <div 
-                className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-pro-card p-[4cqmin] overflow-hidden animate-in fade-in zoom-in duration-300"
-                style={{ containerType: 'size' }}
-              >
-                <div className="w-full h-full flex flex-col justify-center max-w-2xl mx-auto py-[2cqmin]">
-                  <div className="flex justify-between w-full mb-[2cqmin] px-[2cqmin]">
-                    <div className="text-pro-accent font-black uppercase tracking-widest text-[2cqmin]">HOW TO USE</div>
-                    <div className="text-pro-muted font-bold text-[2cqmin]">{guideSlide + 1} / {guideContent.length}</div>
+              <div className="w-full h-full flex flex-col items-center justify-center animate-in fade-in zoom-in duration-300">
+                <div className="w-full flex flex-col justify-center items-center max-w-xl mx-auto py-2">
+                  <div className="flex justify-between w-full mb-4 px-2">
+                    <div className="text-pro-accent font-black uppercase tracking-widest text-[10px] md:text-xs">HOW TO USE</div>
+                    <div className="text-pro-muted font-bold text-[10px] md:text-xs">{guideSlide + 1} / {guideContent.length}</div>
                   </div>
                   
-                  <div className="w-full bg-pro-bg/40 p-[5cqmin] rounded-[3cqmin] border border-pro-border/50 text-left flex flex-col gap-[2cqmin] shadow-inner mt-auto mb-auto">
-                    <h2 className="font-black text-pro-text text-[5cqmin] leading-tight">{guideContent[guideSlide].title}</h2>
-                    <div className="text-pro-muted whitespace-pre-wrap text-[3cqmin] leading-[4.5cqmin]">
+                  <div className="w-full bg-pro-bg/40 p-6 md:p-8 rounded-3xl border border-pro-border/50 text-left flex flex-col gap-4 shadow-inner">
+                    <h2 className="font-black text-pro-text text-2xl md:text-3xl leading-tight">{guideContent[guideSlide].title}</h2>
+                    <div className="text-pro-muted whitespace-pre-wrap text-sm md:text-base leading-relaxed">
                       {guideContent[guideSlide].content}
                     </div>
                   </div>
 
-                  <div className="flex justify-between items-center w-full mt-[4cqmin] gap-[3cqmin]">
+                  <div className="flex justify-between items-center w-full mt-6 gap-4">
                     <button 
                       onClick={() => guideSlide > 0 ? setGuideSlide(s => s - 1) : closeGuide()} 
-                      className="flex-1 py-[3cqmin] rounded-[2cqmin] bg-pro-bg border border-pro-border text-pro-muted font-black uppercase text-[2.5cqmin] tracking-widest transition-all hover:border-pro-muted hover:bg-pro-card cursor-pointer"
+                      className="flex-1 py-3 md:py-4 rounded-2xl bg-pro-bg border border-pro-border text-pro-muted font-black uppercase text-[10px] md:text-xs tracking-widest transition-all hover:border-pro-muted hover:bg-pro-card cursor-pointer"
                     >
                       {guideSlide > 0 ? 'Previous' : 'Skip Guide'}
                     </button>
@@ -535,7 +532,7 @@ export default function Home() {
                           startCalibration();
                         }
                       }} 
-                      className="flex-1 py-[3cqmin] rounded-[2cqmin] bg-pro-accent text-white font-black uppercase text-[2.5cqmin] tracking-widest shadow-[0_4px_14px_rgba(99,102,241,0.2)] transition-all hover:scale-[1.02] cursor-pointer"
+                      className="flex-1 py-3 md:py-4 rounded-2xl bg-pro-accent text-white font-black uppercase text-[10px] md:text-xs tracking-widest shadow-lg shadow-pro-accent/20 transition-all hover:scale-[1.02] cursor-pointer"
                     >
                       {guideSlide < guideContent.length - 1 ? 'Next' : 'Calibrate'}
                     </button>
@@ -579,7 +576,7 @@ export default function Home() {
               </div>
             ) : (
               <div className="flex-1 w-full flex flex-col items-center justify-center min-h-0">
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[clamp(6rem,30vh,20rem)] font-black opacity-[0.015] select-none pointer-events-none transition-all leading-none">{currentPrompt?.noteName || '??'}</div>
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[clamp(8rem,25vw,18rem)] font-black opacity-[0.015] select-none pointer-events-none transition-all leading-none">{currentPrompt?.noteName || '??'}</div>
                 
                 <div className={`mt-auto mb-2 lg:mb-4 px-4 lg:px-5 py-1.5 rounded-full text-[10px] lg:text-xs font-black uppercase tracking-[0.25em] transition-all border shadow-sm flex items-center gap-2 ${feedback.type === 'success' ? 'bg-success border-success text-white' : feedback.type === 'error' ? 'bg-danger border-danger text-white' : 'bg-pro-bg border-pro-border text-pro-muted'}`}>
                   {(!feedback.type && tuner.isRunning) && (
@@ -598,7 +595,7 @@ export default function Home() {
                 
                 <div className={`text-pro-muted text-[10px] lg:text-sm font-black uppercase tracking-[0.3em] opacity-50 text-center ${isRoundComplete ? 'mb-2' : 'mb-1'}`}>{isRoundComplete ? "Round Complete" : currentPrompt ? `Location: String ${currentPrompt.string} — Fret ${currentPrompt.fret}` : "Ready to Begin"}</div>
                 
-                <div className={`text-[clamp(4rem,20vh,12rem)] font-black tracking-tighter leading-none transform drop-shadow-sm ${isRoundComplete ? 'py-4 lg:py-6' : ''} ${feedback.type === 'success' ? 'scale-105 text-success transition-transform duration-150' : feedback.type === 'error' ? 'shake text-danger' : 'text-pro-text'}`}>{isRoundComplete ? "🏆" : currentPrompt ? currentPrompt.noteName : "--"}</div>
+                <div className={`text-[clamp(5rem,15vw,10rem)] font-black tracking-tighter leading-none transform drop-shadow-sm ${isRoundComplete ? 'py-4 lg:py-6' : ''} ${feedback.type === 'success' ? 'scale-105 text-success transition-transform duration-150' : feedback.type === 'error' ? 'shake text-danger' : 'text-pro-text'}`}>{isRoundComplete ? "🏆" : currentPrompt ? currentPrompt.noteName : "--"}</div>
                 
                 <div className="mt-auto mb-auto w-full max-w-[320px]">
                   {tuner.isRunning && currentPrompt && !isRoundComplete ? (
