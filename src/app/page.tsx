@@ -119,65 +119,65 @@ export default function Home() {
   const [feedback, setFeedback] = useState<{message: string, type: 'success'|'error'|'warning'|null}>({message: '', type: null});
 
   // --- AUTO-CALIBRATION ---
-  const [calibrationState, setCalibrationState] = useState<'idle' | 'silence' | 'low_e' | 'high_e' | 'processing' | 'done'>('idle');
-  const calibrationData = useRef({ maxSilence: 0, minNote: 100, maxStrum: 0 });
+  const [calibrationState, setCalibrationState] = useState<'idle' | 'silence' | 'strum' | 'processing' | 'done'>('idle');
+  const calibrationData = useRef({ maxSilence: 0, maxStrum: 0 });
 
   const startCalibration = async () => {
     if (!tuner.isRunning) await tuner.start();
     setIsTransitioning(true); // pause game logic
     
-    calibrationData.current = { maxSilence: 0, minNote: 100, maxStrum: 0 };
+    calibrationData.current = { maxSilence: 0, maxStrum: 0 };
     setCalibrationState('silence');
     setFeedback({ message: 'Measuring Noise Floor... (3s)', type: 'error' });
     
     setTimeout(() => {
-      setCalibrationState('low_e');
-      setFeedback({ message: 'Play Low E (6th String)', type: 'warning' });
+      setCalibrationState('strum');
+      setFeedback({ message: 'Strum your LOUDEST chord! (3s)', type: 'success' });
+      
+      setTimeout(() => {
+        setCalibrationState('processing');
+        setFeedback({ message: 'Optimizing Pipeline', type: 'success' });
+        
+        setTimeout(() => {
+          let finalGate = 8;
+          let finalGain = 8;
+
+          setSettings(prevSettings => {
+            const currentGain = prevSettings.micGain;
+            const { maxSilence, maxStrum } = calibrationData.current;
+            
+            const gainMultiplier = maxStrum > 5 ? (85 / maxStrum) : 1;
+            const newGain = Math.max(1, Math.min(20, Math.round(currentGain * gainMultiplier)));
+            const actualMultiplier = newGain / currentGain;
+            
+            const scaledSilence = maxSilence * actualMultiplier;
+            
+            // Gate is set 8% above the absolute peak fan noise detected
+            let newGate = Math.round(scaledSilence + 8);
+            newGate = Math.max(1, Math.min(40, newGate));
+            
+            finalGate = newGate;
+            finalGain = newGain;
+
+            const updated = { ...prevSettings, micGain: newGain, noiseGateThreshold: newGate };
+            localStorage.setItem('guitar-trainer-settings', JSON.stringify(updated));
+            
+            return updated;
+          });
+
+          setCalibrationState('done');
+          setFeedback({ message: `Gain: ${finalGain}x | Gate: ${finalGate}%`, type: 'success' });
+
+          setTimeout(() => {
+            setCalibrationState('idle');
+            setFeedback({ message: '', type: null }); // explicitly clear to avoid color bleed
+            setIsTransitioning(false); // resume game
+          }, 2500);
+
+        }, 1000);
+      }, 3000);
     }, 3000);
   };
-
-  const finishCalibration = useCallback(() => {
-    setCalibrationState('processing');
-    setFeedback({ message: 'Optimizing Pipeline', type: 'success' });
-    
-    setTimeout(() => {
-      let finalGate = 8;
-      let finalGain = 8;
-
-      setSettings(prevSettings => {
-        const currentGain = prevSettings.micGain;
-        const { maxSilence, maxStrum } = calibrationData.current;
-        
-        const gainMultiplier = maxStrum > 5 ? (85 / maxStrum) : 1;
-        const newGain = Math.max(1, Math.min(20, Math.round(currentGain * gainMultiplier)));
-        const actualMultiplier = newGain / currentGain;
-        
-        const scaledSilence = maxSilence * actualMultiplier;
-        
-        // Gate is set 8% above the absolute peak fan noise detected
-        let newGate = Math.round(scaledSilence + 8);
-        newGate = Math.max(1, Math.min(40, newGate));
-        
-        finalGate = newGate;
-        finalGain = newGain;
-
-        const updated = { ...prevSettings, micGain: newGain, noiseGateThreshold: newGate };
-        localStorage.setItem('guitar-trainer-settings', JSON.stringify(updated));
-        
-        return updated;
-      });
-
-      setCalibrationState('done');
-      setFeedback({ message: `Gain: ${finalGain}x | Gate: ${finalGate}%`, type: 'success' });
-
-      setTimeout(() => {
-        setCalibrationState('idle');
-        setFeedback({ message: '', type: null }); // explicitly clear to avoid color bleed
-        setIsTransitioning(false); // resume game
-      }, 2500);
-
-    }, 1000);
-  }, []);
 
   const masteryScores = useMemo(() => {
     const scores: Record<string, number> = {};
@@ -253,23 +253,13 @@ export default function Home() {
   }, [questionStartTime]);
 
   const triggerSuccessState = useCallback(() => {
-    if (calibrationState === 'low_e') {
-      setCalibrationState('high_e');
-      setFeedback({ message: 'Play High E (1st String)', type: 'success' });
-      return;
-    }
-    if (calibrationState === 'high_e') {
-      finishCalibration();
-      return;
-    }
-
     if (isTransitioningRef.current || !currentPrompt) return;
     setIsTransitioning(true); 
     isTransitioningRef.current = true;
     recordResult(true, currentPrompt);
     setFeedback({message: 'Correct!', type: 'success'});
     setTimeout(selectNextNote, 150);
-  }, [calibrationState, currentPrompt, recordResult, selectNextNote, finishCalibration]);
+  }, [currentPrompt, recordResult, selectNextNote]);
 
   const triggerWrongState = useCallback((detectedNote: string) => {
     if (isTransitioningRef.current || !currentPrompt) return;
@@ -284,11 +274,9 @@ export default function Home() {
   }, [currentPrompt, recordResult]);
 
   const targetMidiForTuner = useMemo(() => {
-    if (calibrationState === 'low_e') return 40; // E2
-    if (calibrationState === 'high_e') return 64; // E4
     if (isTransitioning || isRoundComplete || !currentPrompt) return null;
     return currentPrompt.midi;
-  }, [calibrationState, isTransitioning, isRoundComplete, currentPrompt]);
+  }, [isTransitioning, isRoundComplete, currentPrompt]);
 
   const tuner = useAudioTuner({ 
     micGain: settings.micGain, 
@@ -303,7 +291,7 @@ export default function Home() {
   useEffect(() => {
     if (calibrationState === 'silence') {
       if (tuner.currentVolumePercent > calibrationData.current.maxSilence) calibrationData.current.maxSilence = tuner.currentVolumePercent;
-    } else if (calibrationState === 'low_e' || calibrationState === 'high_e') {
+    } else if (calibrationState === 'strum') {
       if (tuner.currentVolumePercent > calibrationData.current.maxStrum) calibrationData.current.maxStrum = tuner.currentVolumePercent;
     }
   }, [tuner.currentVolumePercent, calibrationState]);
@@ -498,8 +486,8 @@ export default function Home() {
           </section>
         </div>
 
-        <div className="order-1 md:order-2 md:col-span-8 lg:col-span-9 flex flex-col gap-4 min-h-0">
-          <div className={`flex-1 relative flex flex-col items-center justify-center p-6 rounded-[2.5rem] border border-pro-border shadow-pro transition-colors duration-75 overflow-hidden ${calibrationState !== 'idle' ? 'bg-primary/5 border-primary' : feedback.type === 'success' ? 'bg-success/[0.04]' : feedback.type === 'error' ? 'bg-danger/[0.04]' : 'bg-pro-card'}`}>
+        <div className="order-1 md:order-2 md:col-span-8 lg:col-span-9 flex flex-col gap-2 md:gap-4 min-h-0">
+          <div className={`flex-1 relative flex flex-col items-center justify-center p-4 landscape:p-2 lg:p-6 rounded-3xl lg:rounded-[2.5rem] border border-pro-border shadow-pro transition-colors duration-75 overflow-y-auto custom-scrollbar ${calibrationState !== 'idle' ? 'bg-primary/5 border-primary' : feedback.type === 'success' ? 'bg-success/[0.04]' : feedback.type === 'error' ? 'bg-danger/[0.04]' : 'bg-pro-card'}`}>
             
             {showGuide ? (
               <div className="flex flex-col justify-center items-center h-full w-full animate-in fade-in zoom-in duration-300 max-w-xl mx-auto z-10">
@@ -543,22 +531,20 @@ export default function Home() {
                 
                 <div className="mb-8 flex gap-3">
                   <div className={`w-3 h-3 rounded-full transition-all ${calibrationState === 'silence' ? 'bg-danger animate-pulse scale-125 shadow-[0_0_10px_rgba(239,68,68,0.5)]' : calibrationState === 'done' ? 'bg-success shadow-[0_0_10px_rgba(16,185,129,0.5)]' : 'bg-pro-border'}`} />
-                  <div className={`w-3 h-3 rounded-full transition-all ${calibrationState === 'low_e' ? 'bg-warning animate-pulse scale-125 shadow-[0_0_10px_rgba(245,158,11,0.5)]' : calibrationState === 'done' ? 'bg-success shadow-[0_0_10px_rgba(16,185,129,0.5)]' : 'bg-pro-border'}`} />
-                  <div className={`w-3 h-3 rounded-full transition-all ${calibrationState === 'high_e' ? 'bg-success animate-pulse scale-125 shadow-[0_0_10px_rgba(16,185,129,0.5)]' : calibrationState === 'done' ? 'bg-success shadow-[0_0_10px_rgba(16,185,129,0.5)]' : 'bg-pro-border'}`} />
+                  <div className={`w-3 h-3 rounded-full transition-all ${calibrationState === 'strum' ? 'bg-warning animate-pulse scale-125 shadow-[0_0_10px_rgba(245,158,11,0.5)]' : calibrationState === 'done' ? 'bg-success shadow-[0_0_10px_rgba(16,185,129,0.5)]' : 'bg-pro-border'}`} />
+                  <div className={`w-3 h-3 rounded-full transition-all ${calibrationState === 'processing' ? 'bg-success animate-pulse scale-125 shadow-[0_0_10px_rgba(16,185,129,0.5)]' : calibrationState === 'done' ? 'bg-success shadow-[0_0_10px_rgba(16,185,129,0.5)]' : 'bg-pro-border'}`} />
                 </div>
 
                 <div className="text-pro-accent text-sm font-black uppercase tracking-[0.3em] mb-4">
                   {calibrationState === 'silence' && 'Step 1: Noise Floor'}
-                  {calibrationState === 'low_e' && 'Step 2: Low Register'}
-                  {calibrationState === 'high_e' && 'Step 3: High Register'}
+                  {calibrationState === 'strum' && 'Step 2: Peak Volume'}
                   {calibrationState === 'processing' && 'Calculating...'}
                   {calibrationState === 'done' && 'Configuration Saved'}
                 </div>
                 
                 <div className="text-4xl md:text-5xl font-black text-center max-w-lg leading-tight text-pro-text drop-shadow-md">
                   {calibrationState === 'silence' && 'Keep completely quiet.'}
-                  {calibrationState === 'low_e' && 'Play Low E (quietly)'}
-                  {calibrationState === 'high_e' && 'Play High E (loudly)'}
+                  {calibrationState === 'strum' && 'Strum your LOUDEST chord!'}
                   {calibrationState === 'processing' && 'Optimizing Pipeline'}
                   {calibrationState === 'done' && 'Ready to Train.'}
                 </div>
@@ -566,7 +552,7 @@ export default function Home() {
                 {calibrationState !== 'processing' && calibrationState !== 'done' && (
                   <div className="mt-12 w-full max-w-md bg-pro-bg/50 rounded-full h-4 overflow-hidden border border-pro-border shadow-inner">
                     <div 
-                      className={`h-full transition-all duration-75 ${calibrationState === 'silence' ? 'bg-danger' : calibrationState === 'low_e' ? 'bg-warning' : 'bg-success'}`}
+                      className={`h-full transition-all duration-75 ${calibrationState === 'silence' ? 'bg-danger' : calibrationState === 'strum' ? 'bg-warning' : 'bg-success'}`}
                       style={{ width: `${tuner.currentVolumePercent}%` }}
                     />
                   </div>
