@@ -559,7 +559,7 @@ export default function Home() {
                 )}
               </div>
             ) : (
-              <>
+              <div className="flex-1 w-full flex flex-col items-center justify-center my-auto min-h-min py-4">
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[clamp(10rem,25vw,20rem)] font-black opacity-[0.015] select-none pointer-events-none transition-all leading-none">{currentPrompt?.noteName || '??'}</div>
                 <div className={`mb-4 px-5 py-1.5 rounded-full text-xs font-black uppercase tracking-[0.25em] transition-all border shadow-sm flex items-center gap-2 ${feedback.type === 'success' ? 'bg-success border-success text-white' : feedback.type === 'error' ? 'bg-danger border-danger text-white' : 'bg-pro-bg border-pro-border text-pro-muted'}`}>
                   {(!feedback.type && tuner.isRunning) && (
@@ -575,7 +575,7 @@ export default function Home() {
                   )}
                   <span>{feedback.message || (tuner.isRunning ? 'Scanning Frequency' : tuner.isInitializing ? 'Waking Neural Core' : 'Standby')}</span>
                 </div>
-                <div className={`text-pro-muted text-sm font-black uppercase tracking-[0.3em] ${isRoundComplete ? 'mb-4 mt-2' : 'mb-2'} opacity-50`}>{isRoundComplete ? "Round Complete" : currentPrompt ? `Location: String ${currentPrompt.string} — Fret ${currentPrompt.fret}` : "Ready to Begin"}</div>
+                <div className={`text-pro-muted text-sm font-black uppercase tracking-[0.3em] ${isRoundComplete ? 'mb-4 mt-2' : 'mb-2'} opacity-50 text-center`}>{isRoundComplete ? "Round Complete" : currentPrompt ? `Location: String ${currentPrompt.string} — Fret ${currentPrompt.fret}` : "Ready to Begin"}</div>
                 <div className={`text-[clamp(6rem,15vw,12rem)] font-black tracking-tighter leading-none transform drop-shadow-sm ${isRoundComplete ? 'py-6' : ''} ${feedback.type === 'success' ? 'scale-105 text-success transition-transform duration-150' : feedback.type === 'error' ? 'shake text-danger' : 'text-pro-text'}`}>{isRoundComplete ? "🏆" : currentPrompt ? currentPrompt.noteName : "--"}</div>
                 <div className="mt-8 w-full max-w-[320px]">
                   {tuner.isRunning && currentPrompt && !isRoundComplete ? (
@@ -591,19 +591,19 @@ export default function Home() {
                         {countdown !== null ? `Auto-Starting in ${countdown}...` : 'Launch Round'}
                       </button>
                       {isRoundComplete && (
-                        <label className="flex items-center justify-center gap-2 cursor-pointer opacity-70 hover:opacity-100 transition-opacity">
+                        <label className="flex items-center justify-center gap-2 cursor-pointer opacity-70 hover:opacity-100 transition-opacity mt-2">
                           <input type="checkbox" checked={settings.autoNextRound} onChange={e => updateSetting('autoNextRound', e.target.checked)} className="accent-pro-accent w-3 h-3" />
                           <span className="text-xs font-bold uppercase tracking-widest text-pro-muted">Auto-Start Next Round</span>
                         </label>
                       )}
                     </div>
                   )}
-                  </div>
-                  </>
-                  )}
-                  </div>
+                </div>
+              </div>
+            )}
+          </div>
 
-                  <div className="bg-pro-card rounded-3xl border border-pro-border p-4 md:p-5 shadow-pro relative overflow-x-auto group custom-scrollbar">
+          <div className="bg-pro-card rounded-3xl border border-pro-border p-4 md:p-5 shadow-pro relative overflow-x-auto group custom-scrollbar">
                      <div className="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-pro-accent/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                      <Fretboard highlightedFret={currentPrompt ? { string: currentPrompt.string, fret: currentPrompt.fret } : null} activeNote={(tuner.detectedNoteName && currentPrompt && tuner.detectedNoteName.replace(/-?\d+$/, '') === currentPrompt.noteName) ? { string: currentPrompt.string, fret: currentPrompt.fret } : null} masteryData={masteryScores} showHeatmap={settings.showHeatmap} fretRange={settings.fretRange} />
                   </div>
