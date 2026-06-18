@@ -573,9 +573,10 @@ export default function Home() {
                 )}
               </div>
             ) : (
-              <div className="flex-1 w-full flex flex-col items-center justify-center my-auto min-h-min py-4">
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[clamp(10rem,25vw,20rem)] font-black opacity-[0.015] select-none pointer-events-none transition-all leading-none">{currentPrompt?.noteName || '??'}</div>
-                <div className={`mb-4 px-5 py-1.5 rounded-full text-xs font-black uppercase tracking-[0.25em] transition-all border shadow-sm flex items-center gap-2 ${feedback.type === 'success' ? 'bg-success border-success text-white' : feedback.type === 'error' ? 'bg-danger border-danger text-white' : 'bg-pro-bg border-pro-border text-pro-muted'}`}>
+              <div className="flex-1 w-full flex flex-col items-center justify-center min-h-0">
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[clamp(6rem,30vh,20rem)] font-black opacity-[0.015] select-none pointer-events-none transition-all leading-none">{currentPrompt?.noteName || '??'}</div>
+                
+                <div className={`mt-auto mb-2 lg:mb-4 px-4 lg:px-5 py-1.5 rounded-full text-[10px] lg:text-xs font-black uppercase tracking-[0.25em] transition-all border shadow-sm flex items-center gap-2 ${feedback.type === 'success' ? 'bg-success border-success text-white' : feedback.type === 'error' ? 'bg-danger border-danger text-white' : 'bg-pro-bg border-pro-border text-pro-muted'}`}>
                   {(!feedback.type && tuner.isRunning) && (
                     <svg className="w-3.5 h-3.5 opacity-70 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5 10v4a2 2 0 002 2h2.586l3.707 3.707A1 1 0 0015 19V5a1 1 0 00-1.707-.707L9.586 8H7a2 2 0 00-2 2z"></path>
@@ -589,25 +590,28 @@ export default function Home() {
                   )}
                   <span>{feedback.message || (tuner.isRunning ? 'Scanning Frequency' : tuner.isInitializing ? 'Waking Neural Core' : 'Standby')}</span>
                 </div>
-                <div className={`text-pro-muted text-sm font-black uppercase tracking-[0.3em] ${isRoundComplete ? 'mb-4 mt-2' : 'mb-2'} opacity-50 text-center`}>{isRoundComplete ? "Round Complete" : currentPrompt ? `Location: String ${currentPrompt.string} — Fret ${currentPrompt.fret}` : "Ready to Begin"}</div>
-                <div className={`text-[clamp(6rem,15vw,12rem)] font-black tracking-tighter leading-none transform drop-shadow-sm ${isRoundComplete ? 'py-6' : ''} ${feedback.type === 'success' ? 'scale-105 text-success transition-transform duration-150' : feedback.type === 'error' ? 'shake text-danger' : 'text-pro-text'}`}>{isRoundComplete ? "🏆" : currentPrompt ? currentPrompt.noteName : "--"}</div>
-                <div className="mt-8 w-full max-w-[320px]">
+                
+                <div className={`text-pro-muted text-[10px] lg:text-sm font-black uppercase tracking-[0.3em] opacity-50 text-center ${isRoundComplete ? 'mb-2' : 'mb-1'}`}>{isRoundComplete ? "Round Complete" : currentPrompt ? `Location: String ${currentPrompt.string} — Fret ${currentPrompt.fret}` : "Ready to Begin"}</div>
+                
+                <div className={`text-[clamp(4rem,20vh,12rem)] font-black tracking-tighter leading-none transform drop-shadow-sm ${isRoundComplete ? 'py-4 lg:py-6' : ''} ${feedback.type === 'success' ? 'scale-105 text-success transition-transform duration-150' : feedback.type === 'error' ? 'shake text-danger' : 'text-pro-text'}`}>{isRoundComplete ? "🏆" : currentPrompt ? currentPrompt.noteName : "--"}</div>
+                
+                <div className="mt-auto mb-auto w-full max-w-[320px]">
                   {tuner.isRunning && currentPrompt && !isRoundComplete ? (
-                    <button onClick={() => { if (!isTransitioning) { recordResult(false, currentPrompt); selectNextNote(); }}} className="w-full py-3.5 rounded-xl bg-pro-bg border border-pro-border text-pro-muted font-black uppercase text-xs tracking-widest transition-all cursor-pointer hover:border-pro-muted hover:bg-pro-card active:scale-95 shadow-sm">Skip Iteration</button>
+                    <button onClick={() => { if (!isTransitioning) { recordResult(false, currentPrompt); selectNextNote(); }}} className="w-full py-2.5 lg:py-3.5 rounded-xl bg-pro-bg border border-pro-border text-pro-muted font-black uppercase text-[10px] lg:text-xs tracking-widest transition-all cursor-pointer hover:border-pro-muted hover:bg-pro-card active:scale-95 shadow-sm">Skip Iteration</button>
                   ) : !tuner.isRunning ? (
-                    <button onClick={tuner.start} disabled={tuner.isInitializing} className={`w-full py-4 rounded-3xl font-black uppercase text-sm md:text-base tracking-[0.2em] shadow-2xl transition-all active:scale-95 flex items-center justify-center gap-3 ${tuner.isInitializing ? 'bg-pro-border text-pro-muted cursor-wait' : 'bg-pro-text text-pro-card cursor-pointer hover:scale-[1.02] shadow-pro-accent/10'}`}>
+                    <button onClick={tuner.start} disabled={tuner.isInitializing} className={`w-full py-3 lg:py-4 rounded-3xl font-black uppercase text-sm md:text-base tracking-[0.2em] shadow-2xl transition-all active:scale-95 flex items-center justify-center gap-3 ${tuner.isInitializing ? 'bg-pro-border text-pro-muted cursor-wait' : 'bg-pro-text text-pro-card cursor-pointer hover:scale-[1.02] shadow-pro-accent/10'}`}>
                       {tuner.isInitializing && <div className="w-3 h-3 border-2 border-pro-muted border-t-pro-accent rounded-full animate-spin"></div>}
                       {tuner.isInitializing ? 'Connecting...' : 'Start Training'}
                     </button>
                   ) : (
-                    <div className="flex flex-col gap-3 w-full">
-                      <button onClick={startNewRound} className="w-full py-4 px-6 rounded-3xl bg-pro-accent text-white font-black uppercase text-xs md:text-sm tracking-widest shadow-xl shadow-pro-accent/20 cursor-pointer hover:scale-[1.02] active:scale-95 transition-all whitespace-nowrap">
+                    <div className="flex flex-col gap-2 lg:gap-3 w-full">
+                      <button onClick={startNewRound} className="w-full py-3 lg:py-4 px-6 rounded-3xl bg-pro-accent text-white font-black uppercase text-xs md:text-sm tracking-widest shadow-xl shadow-pro-accent/20 cursor-pointer hover:scale-[1.02] active:scale-95 transition-all whitespace-nowrap">
                         {countdown !== null ? `Auto-Starting in ${countdown}...` : 'Launch Round'}
                       </button>
                       {isRoundComplete && (
                         <label className="flex items-center justify-center gap-2 cursor-pointer opacity-70 hover:opacity-100 transition-opacity mt-2">
                           <input type="checkbox" checked={settings.autoNextRound} onChange={e => updateSetting('autoNextRound', e.target.checked)} className="accent-pro-accent w-3 h-3" />
-                          <span className="text-xs font-bold uppercase tracking-widest text-pro-muted">Auto-Start Next Round</span>
+                          <span className="text-[10px] lg:text-xs font-bold uppercase tracking-widest text-pro-muted">Auto-Start Next Round</span>
                         </label>
                       )}
                     </div>
